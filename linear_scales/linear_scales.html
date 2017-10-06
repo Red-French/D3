@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>D3</title>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+</head>
+<body>
+  <script>
+    let scale = d3.scale.linear()  // scale.linear() transforms numbers from data space into pixel space
+      .domain([0, 1])  // data space; sets value of domain (min and max values)
+      .range ([0, 100]);  // pixel space; sets values of range (min and max values)
+
+      console.log(scale(0));  // prints 0; the input of scale function is the data space value; return is the pixel space value
+      console.log(scale(0.5));  // prints 50
+      console.log(scale(1));  // prints 100
+      console.log(scale.domain());  // calling without arguments makes this a getter function
+      console.log(scale.range());  // calling without arguments makes this a getter function
+  </script>
+</body>
+</html>
