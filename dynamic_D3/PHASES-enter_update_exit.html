@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Dynamic D3</title>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+</head>
+<body>
+
+  <script>
+      
+  // D3 Phases: enter(), update(), exit()
+      // enter() --> creates elements
+      // update()  --> updates
+      // exit()  --> 
+      
+      let scale = d3.scale.linear()
+        .domain([1, 5])
+        .range([0, 200]);
+      
+      let svg = d3.select("body").append("svg")
+        .attr("width", 250)
+        .attr("height", 250);
+      
+      
+      // WITHOUT PHASES CAUSES UNDESIRED RESULT
+      // ** below results in 3 red and 2 blue rather than updating to 5 blue **
+      // this is because enter() does not handle updates, only new data
+      function render(data, color) {
+        let rects = svg.selectAll("rect").data(data)
+
+        rects.enter().append("rect")
+        .attr("x", scale)
+        .attr("y", 50)
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("fill", color);
+      }
+      
+      render([1, 2, 2.5], "red");
+      render([1, 2, 3, 4, 5], "blue");
+      
+//      ***********************************
+
+      // USING D3 PHASES
+      
+      function render2(data, color) {
+        let rects = svg.selectAll("rect").data(data)
+
+        // ENTER phase creates elements
+        rects.enter().append("rect")
+          .attr("y", 50)
+          .attr("width", 20)
+          .attr("height", 20)
+          
+        // UPDATE phase (sets all values)
+        rects
+          .attr("x", scale)
+          .attr("fill", color);
+      
+        // EXIT phase (triggers when less data than elements)
+        rects.exit().remove();
+      }
+      
+      setTimeout(function() {render2([1, 2, 2.5], "red");}, 1000);
+      setTimeout(function() {render2([1, 2, 3, 4, 5], "blue");}, 2000);
+      setTimeout(function() {render2([1, 2], "green");}, 3000);
+      setTimeout(function() {render2([3, 4, 5], "cyan");}, 4000);
+      setTimeout(function() {render2([3, 5], "magenta");}, 5000);
+      
+      
+  </script>
+</body>
+</html>

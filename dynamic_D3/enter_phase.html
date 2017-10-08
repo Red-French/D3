@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Dynamic D3</title>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+</head>
+<body>
+
+  <!-- Dynamic -->
+  <script>
+      
+      // the below pattern was designed so you can have data that is changing and D3 updating
+      
+      const data = [1, 2, 3, 4, 5];
+      
+      let scale = d3.scale.linear()
+        .domain([1, 5])  // data space
+        .range([0, 200]);  // pixel space
+      
+      let svg = d3.select("body").append("svg")
+        .attr("width", 250)
+        .attr("height", 250);
+      
+      // D3 data binding
+      let rects = svg.selectAll("rect")  // gives selection containing all existing "rect" elements on the svg; in this case, there are none
+        .data(data)  // pass it the array
+      
+        rects.enter().append("rect")  // .enter() provides a virtual selection; it executes code below only for the case where there is no DOM element (no "rect") but there is a data element
+      
+//        .attr("x", function(d) { // set y attribute of each rect to the return value of this fxn
+//            return scale(d);  // scale is called for each 'data' array item; 1 returns 0, 2 returns 62.5, 3 returns 125, etc.
+//        })
+      
+        .attr("x", scale)  // shortcut for above is just pass in the scale function
+        .attr("y", 50)
+        .attr("width", 20)
+        .attr("height", 20);
+  </script>
+</body>
+</html>
