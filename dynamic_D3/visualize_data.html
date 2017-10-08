@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Dynamic D3</title>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+</head>
+<body>
+
+  <script>
+      
+      let svg = d3.select("body").append("svg")
+        .attr("width", 250)
+        .attr("height", 250);
+      
+      
+      function render(data) {
+          
+        // BIND DATA
+        let circles = svg.selectAll("circle").data(data)
+
+        // ENTER
+        circles.enter().append("circle")  // creates circle, radius 10
+          .attr("r", 10);
+          
+        // UPDATE
+        circles
+          .attr("cx", (d)=>{return d.x;})
+          .attr("cy", (d)=>{return d.y});
+      
+        // EXIT
+        circles.exit().remove();  // never executes, but good idea to have
+      }
+      
+      
+//      const arrayOstuff = [  // NOTE: this data is in pixels
+//          { x: 100, y: 100 },
+//          { x: 130, y: 120 },
+//          { x: 80, y: 180 },
+//          { x: 180, y: 80 },
+//          { x: 180, y: 40 }
+//      ];
+      
+//      render(arrayOstuff);
+      
+      function extractData(d) {  // d3 reads csv values as strings
+          d.x = +d.x;  // parse to integer
+          d.y = +d.y;
+          return d;
+      }
+      
+//      d3.csv("data.csv", extractData, function(anArrayOfObjects) {  // calls extractData() for each set of data
+//        render(anArrayOfObjects);
+//      });
+      d3.csv("data.csv", extractData, render);  // calls extractData() for each set of data and then calls render once
+      
+      
+  </script>
+</body>
+</html>
