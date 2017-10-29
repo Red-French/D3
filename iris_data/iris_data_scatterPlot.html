@@ -6,46 +6,56 @@
   <title>Dynamic D3</title>
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<!--
+  <style>
+      circle {
+        fill: yellow;
+        stroke: blue;
+        stroke-width: 2px;
+      }
+  </style>
+-->
 </head>
 <body>
 
   <script>
       
+    const outerWidth = 300;
+    const outerHeight = 250;
+    const circleRadius = 5;
+
+    const xColumn = "sepal_length";
+    const yColumn = "petal_length";
+    const colorColumn = "species";
+      
     const svg = d3.select("body").append("svg")
-        .attr("width", 250)
-        .attr("height", 250);
+        .attr("width", outerWidth)
+        .attr("height", outerHeight);
     
-    let xScale = d3.scale.linear().range([0, 250]);
-    let yScale = d3.scale.linear().range([0, 250]);
+    const xScale = d3.scale.linear().range([0, outerWidth]);
+    const yScale = d3.scale.linear().range([outerHeight, 0]);  // format graph origin as bottom left rather than the default of top left
+    const colorScale = d3.scale.category10();  // category10() is a built-in D3 ordinal scale where the range is an array of colors
       
     // set x and y scale domain to min/max length of relevant data
     function render(data) {
-        xScale.domain(d3.extent(data, function(d) {
-            return d.sepal_length;
-        }));
-        yScale.domain(d3.extent(data, function(d) {
-            return d.petal_length;
-        }));
+        xScale.domain(d3.extent(data, function(d) { return d[xColumn]; })); // rather than returning 'd.sepal_length', make property a variable
+        
+        yScale.domain(d3.extent(data, function(d) { return d[yColumn]; })); // rather than returning 'd.petal_length', make property a variable
         
         // bind data
         let circles = svg.selectAll("circle").data(data);
-        
-        // enter phase
-        circles.enter().append("circle").attr("r", 10);
-        
-        // update phase
-        circles
-          .attr("cx", (d) =>{return xScale(d.sepal_length);})
-          .attr("cy", (d) =>{return xScale(d.petal_length);});
-        
-        // exit phase
-        circles.exit().remove();
+        circles.enter().append("circle").attr("r", circleRadius);  // enter phase
+        circles  // update phase
+          .attr("cx", (d) =>{return xScale(d[xColumn]);})
+          .attr("cy", (d) =>{return yScale(d[yColumn]);})
+          .attr("fill", (d) => {return colorScale(d[colorColumn])});
+        circles.exit().remove();  // exit phase
     }
       
     function type(d) {
-        d.sepal_length = +d.sepal_length;
+        d[xColumn] = +d[xColumn];  // rather than 'd.sepal_length', make property a variable
         d.sepal_width = +d.sepal_width;
-        d.petal_length = +d.petal_length;
+        d[yColumn] = +d[yColumn];  // rather than 'd.petal_length', make property a variable
         d.petal_width = +d.petal_width;
         return d;
     }
