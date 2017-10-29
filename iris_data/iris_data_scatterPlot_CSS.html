@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Dynamic D3</title>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+      circle {
+        fill: yellow;
+        stroke: blue;
+        stroke-width: 2px;
+      }
+  </style>
+</head>
+<body>
+
+  <script>
+      
+    const outerWidth = 300;
+    const outerHeight = 250;
+    const circleRadius = 5;
+
+    const xColumn = "sepal_length";
+    const yColumn = "petal_length";
+      
+    const svg = d3.select("body").append("svg")
+        .attr("width", outerWidth)
+        .attr("height", outerHeight);
+    
+    const xScale = d3.scale.linear().range([0, outerWidth]);
+    const yScale = d3.scale.linear().range([outerHeight, 0]);  // format graph origin as bottom left rather than the default of top left
+      
+    // set x and y scale domain to min/max length of relevant data
+    function render(data) {
+        xScale.domain(d3.extent(data, function(d) { return d[xColumn]; })); // rather than returning 'd.sepal_length', make property a variable
+        yScale.domain(d3.extent(data, function(d) { return d[yColumn]; })); // rather than returning 'd.petal_length', make property a variable
+        
+        // bind data
+        let circles = svg.selectAll("circle").data(data);
+        circles.enter().append("circle").attr("r", circleRadius);  // enter phase
+        circles  // update phase
+          .attr("cx", (d) =>{return xScale(d[xColumn]);})
+          .attr("cy", (d) =>{return yScale(d[yColumn]);});
+        circles.exit().remove();  // exit phase
+    }
+      
+    function type(d) {
+        d[xColumn] = +d[xColumn];  // rather than 'd.sepal_length', make property a variable
+        d.sepal_width = +d.sepal_width;
+        d[yColumn] = +d[yColumn];  // rather than 'd.petal_length', make property a variable
+        d.petal_width = +d.petal_width;
+        return d;
+    }
+      
+    d3.csv("iris_data.csv", type, render);
+
+  </script>
+</body>
+</html>
