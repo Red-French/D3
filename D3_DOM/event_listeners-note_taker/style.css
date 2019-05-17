@@ -1,0 +1,68 @@
+body {
+  background-color: #e4e4e4;
+}
+
+h1 {
+  text-align: center;
+}
+
+#notes {
+  margin: 0 auto;
+  width: 75%;
+}
+
+.note {
+  background-color: #fdffb7;
+  border: 8px solid #d4daa7;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+form {
+  text-align: center;
+}
+
+input {
+  width: 50%;
+}
+
+input,
+button {
+  padding: 10px;
+}
+
+button {
+  background-color: #ff9494;
+  border: none;
+  border-radius: 5px;
+  margin-left: .5em;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: #fe2222;
+}
+
+button:focus {
+  outline: none;
+}
+
+.clearListBtn {
+  background-color: red;
+  color: white;
+}
+.clearListBtn:hover {
+  background-color: pink;
+}
+.surpriseBtn {
+  background-color: Chartreuse;
+}
+.surpriseBtn:hover {
+  background-color: green;
+}
+.tempNote {
+  background-color: Chartreuse;
+  border: 8px solid green;
+  border-radius: 8px;
+  padding: 10px;
+}
