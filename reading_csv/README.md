@@ -1,4 +1,4 @@
-# D3
+# D3 (v3.5.5)
 ## Reading CSV Files
 
 The d3 library provides a 'd3' object and its methods, one of which is csv(), which allows loading csv files.
