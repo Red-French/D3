@@ -1,4 +1,4 @@
-var models = [
+const models = [
   {
     "coName":"ABC Co",
     "totalBooks":19,
@@ -16,32 +16,32 @@ var models = [
   },
 ];
 
-var container = d3.select('#viz'),
+let container = d3.select('#viz'),
       width = 520,
       height = 220,
       margin = {top: 30, right: 20, bottom: 30, left: 50},
       barPadding = .2,
       axisTicks = {qty: 5, outerSize: 0, dateFormat: '%m-%d'};
 
-var svg = container
+let svg = container
      .append("svg")
      .attr("width", width)
      .attr("height", height)
      .append("g")
      .attr("transform", `translate(${margin.left},${margin.top})`);
 
-var xScale0 = d3.scaleBand().range([0, width - margin.left - margin.right]).padding(barPadding)
-var xScale1 = d3.scaleBand()
-var yScale = d3.scaleLinear().range([height - margin.top - margin.bottom, 0])
+let xScale0 = d3.scaleBand().range([0, width - margin.left - margin.right]).padding(barPadding)
+let xScale1 = d3.scaleBand()
+let yScale = d3.scaleLinear().range([height - margin.top - margin.bottom, 0])
 
-var xAxis = d3.axisBottom(xScale0).tickSizeOuter(axisTicks.outerSize);
-var yAxis = d3.axisLeft(yScale).ticks(axisTicks.qty).tickSizeOuter(axisTicks.outerSize);
+let xAxis = d3.axisBottom(xScale0).tickSizeOuter(axisTicks.outerSize);
+let yAxis = d3.axisLeft(yScale).ticks(axisTicks.qty).tickSizeOuter(axisTicks.outerSize);
 
 xScale0.domain(models.map(d => d.coName))
 xScale1.domain(['totalBooks', 'totalPolicies']).range([0, xScale0.bandwidth()])
 yScale.domain([0, d3.max(models, d => d.totalBooks > d.totalPolicies ? d.totalBooks : d.totalPolicies)])
 
-var coName = svg.selectAll(".coName")
+let coName = svg.selectAll(".coName")
   .data(models)
   .enter().append("g")
   .attr("class", "coName")
